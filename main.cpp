@@ -30,8 +30,8 @@ void usage() {
 }
 
 void my_ip(char* interface, char IP_str[20]){
-	struct ifreq ifr;
-	int fd;
+struct ifreq ifr;
+int fd;
     fd = socket(AF_INET, SOCK_DGRAM, 0);
     strncpy(ifr.ifr_name, interface, IFNAMSIZ);
     if (ioctl(fd, SIOCGIFADDR, &ifr) < 0) printf("Error");
@@ -78,7 +78,7 @@ void getyourmacaddress(char* dev, char* sip, char* smac, char* tip, char* tmac){
 	}
 
 	struct pcap_pkthdr* pkthdr;
-    const u_char* packet1;
+    	const u_char* packet1;
 	while(1){
 		int r = pcap_next_ex(handle, &pkthdr, &packet1);
 		struct EthArpPacket *pkt = (struct EthArpPacket*) packet1;
@@ -245,7 +245,7 @@ int main(int argc, char* argv[]) {
 				}
 				
 				struct pcap_pkthdr* header;
-    			const u_char* pkt;
+    				const u_char* pkt;
 				int r = pcap_next_ex(handle, &header, &pkt);
 				if(r==0||r==1||r==2){
 					con = 1;
