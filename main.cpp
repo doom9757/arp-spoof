@@ -135,13 +135,13 @@ void pkt_relay(char* dev, char* smac, char* amac, char* dmac){
 	}
 	while(true){
 		struct pcap_pkthdr* header;
-    	const u_char* pkt;
+    		const u_char* pkt;
 		int r = pcap_next_ex(handle, &header, &pkt);
 		
 		struct packet_hdr pkt_hdr;
-    	memcpy(&(pkt_hdr.ethhdr), pkt, LIBNET_ETH_H);
-    	memcpy(&(pkt_hdr.iphdr), pkt + LIBNET_ETH_H, LIBNET_IPV4_H);
-    	memcpy(&(pkt_hdr.tcphdr), pkt + LIBNET_ETH_H+LIBNET_IPV4_H, LIBNET_TCP_H);
+    		memcpy(&(pkt_hdr.ethhdr), pkt, LIBNET_ETH_H);
+    		memcpy(&(pkt_hdr.iphdr), pkt + LIBNET_ETH_H, LIBNET_IPV4_H);
+    		memcpy(&(pkt_hdr.tcphdr), pkt + LIBNET_ETH_H+LIBNET_IPV4_H, LIBNET_TCP_H);
 		memcpy(&(pkt_hdr.data), pkt + LIBNET_ETH_H + LIBNET_IPV4_H + 4 * pkt_hdr.tcphdr.th_off, header->caplen - (LIBNET_ETH_H + LIBNET_IPV4_H + 4 * pkt_hdr.tcphdr.th_off));
 
 		uint8_t tpsmac[6], tptmac[6], tpamac[6];
@@ -158,10 +158,10 @@ void pkt_relay(char* dev, char* smac, char* amac, char* dmac){
 		sprintf(&dmac1[i*3], "%02X", tpamac[i]);
 		for(i=0;i<6;i++){
 			if(64 < dmac[i*3]) tptmac[i] = (dmac[i*3] - 55) * 16;
-			else 				 tptmac[i] = (dmac[i*3] - 48) * 16;
+			else tptmac[i] = (dmac[i*3] - 48) * 16;
 
 			if(64 < dmac[i*3+1]) tptmac[i] += (dmac[i*3+1] - 55);
-			else 				   tptmac[i] += (dmac[i*3+1] - 48);
+			else tptmac[i] += (dmac[i*3+1] - 48);
 		}
 		if(memcmp(dmac, dmac1, sizeof(amac))==0) break; // arp table ended
 		
@@ -204,9 +204,9 @@ int main(int argc, char* argv[]) {
 		tip = argv[i+1];
 	
 		my_ip(dev, ipstr);  
-    	my_mac(dev, macstr);
+    		my_mac(dev, macstr);
 		aip = ipstr;
-    	amac = macstr;
+    		amac = macstr;
 
 		strcpy(macs, amac);
 		getyourmacaddress(dev, aip, macs, sip, macd1);//request
